@@ -9,6 +9,7 @@ export default class CanvasRenderManager {
       throw new Error('2D rendering context not supported or canvas unavailable');
     }
     this.ctx = ctx;
+    this.backgroundImage = null;
     this._handleResize = this._resizeCanvas.bind(this);
     this._handleResize();
     window.addEventListener('resize', this._handleResize);
@@ -25,6 +26,14 @@ export default class CanvasRenderManager {
   clear() {
     const { width, height } = this.canvas.getBoundingClientRect();
     this.ctx.clearRect(0, 0, width, height);
+  }
+
+  setBackgroundImage(img) {
+    if (img instanceof HTMLImageElement) {
+      this.backgroundImage = img;
+    } else {
+      this.backgroundImage = null;
+    }
   }
 
   drawEntities(entities) {
@@ -46,6 +55,10 @@ export default class CanvasRenderManager {
 
   render(state) {
     this.clear();
+    const { width, height } = this.canvas.getBoundingClientRect();
+    if (this.backgroundImage) {
+      this.ctx.drawImage(this.backgroundImage, 0, 0, width, height);
+    }
     if (state.entities && Array.isArray(state.entities)) {
       this.drawEntities(state.entities);
     }

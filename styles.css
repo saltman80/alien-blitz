@@ -1,11 +1,11 @@
 :root {
   --hud-font: 'Press Start 2P', sans-serif;
-  --hud-color: #ffffff;
+  --hud-color: #e0e0e0;
   --hud-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-  --background-gradient: radial-gradient(circle at top, #170033, #000000);
+  --background-gradient: radial-gradient(circle at top, #2b2b2b, #000000);
   --accent-green: #00ff99;
   --accent-purple: #8e2bff;
-  --overlay-bg: rgba(0, 0, 0, 0.8);
+  --overlay-bg: rgba(20, 20, 20, 0.8);
   --button-bg: var(--accent-purple);
   --button-color: #ffffff;
   --button-border: var(--accent-green);
@@ -36,7 +36,7 @@ body {
   display: block;
   width: 100%;
   height: auto;
-  background-color: #000000;
+  background-color: transparent;
   border-bottom: 2px solid var(--accent-green);
 }
 
@@ -46,7 +46,22 @@ body {
   top: 10px;
   left: 10px;
   pointer-events: none;
-  color: white;
+  color: var(--hud-color);
+  display: flex;
+  gap: 8px;
+}
+
+#ui-overlay > div {
+  background-color: rgba(50, 50, 50, 0.6);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--accent-purple);
+}
+
+#score-container span,
+#lives-container span,
+#level-container span {
+  color: var(--accent-green);
 }
 
 .hud {

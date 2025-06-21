@@ -20,6 +20,9 @@ let canvasHeight = 0;
 function initGame() {
   const canvas = document.getElementById('game-canvas');
   renderer = new CanvasRenderManager(canvas);
+  if (window.gameAssets && window.gameAssets.images.background) {
+    renderer.setBackgroundImage(window.gameAssets.images.background);
+  }
   const canvasRect = canvas.getBoundingClientRect();
   canvasWidth = canvasRect.width;
   canvasHeight = canvasRect.height;
