@@ -5,13 +5,15 @@ class Bullet {
   /**
    * @param {number} x - Initial x-coordinate.
    * @param {number} y - Initial y-coordinate.
+   * @param {object} [options]
    */
-  constructor(x, y) {
+  constructor(x, y, options = {}) {
     this.x = x;
     this.y = y;
     this.radius = 2;
     this.speed = 300; // pixels per second
     this.isAlive = true;
+    this.image = options.image;
   }
 
   /**
@@ -30,9 +32,19 @@ class Bullet {
    * @param {CanvasRenderingContext2D} ctx
    */
   draw(ctx) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fill();
+    if (this.image instanceof HTMLImageElement) {
+      ctx.drawImage(
+        this.image,
+        this.x - this.image.width / 2,
+        this.y - this.image.height / 2,
+        this.image.width,
+        this.image.height
+      );
+    } else {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 }
 
@@ -51,8 +63,8 @@ class BulletLifecycleManager {
    * @param {number} x
    * @param {number} y
    */
-  shoot(x, y) {
-    this.bullets.push(new Bullet(x, y));
+  shoot(x, y, options = {}) {
+    this.bullets.push(new Bullet(x, y, options));
   }
 
   /**
@@ -90,8 +102,8 @@ class BulletLifecycleManager {
 
 const bulletManager = new BulletLifecycleManager();
 
-export function shoot(x, y) {
-  bulletManager.shoot(x, y);
+export function shoot(x, y, options = {}) {
+  bulletManager.shoot(x, y, options);
 }
 
 export function update(dt) {

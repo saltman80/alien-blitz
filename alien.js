@@ -13,7 +13,17 @@ export default class Alien extends Entity {
   }
 
   draw(ctx) {
-    ctx.fillStyle = this.config.color || 'lime';
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    if (this.config.image instanceof HTMLImageElement) {
+      ctx.drawImage(
+        this.config.image,
+        this.x,
+        this.y,
+        this.width,
+        this.height
+      );
+    } else {
+      ctx.fillStyle = this.config.color || 'lime';
+      ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
   }
 }
