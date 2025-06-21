@@ -43,24 +43,14 @@ export default class CanvasRenderManager {
     this.ctx.fillRect(x, y, width, height);
   }
 
-  drawHUD(score) {
-    this.ctx.save();
-    this.ctx.font = '20px sans-serif';
-    this.ctx.fillStyle = '#fff';
-    this.ctx.textAlign = 'left';
-    this.ctx.textBaseline = 'top';
-    this.ctx.fillText(`Score: ${score}`, 10, 10);
-    this.ctx.restore();
-  }
 
   render(state) {
     this.clear();
     if (state.entities && Array.isArray(state.entities)) {
       this.drawEntities(state.entities);
     }
-    if (typeof state.score !== 'undefined') {
-      this.drawHUD(state.score);
-    }
+    // Score and other HUD elements are rendered via the HTML overlay
+    // so no on-canvas HUD drawing is required here.
   }
 
   destroy() {
