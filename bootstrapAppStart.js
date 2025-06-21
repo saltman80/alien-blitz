@@ -24,23 +24,31 @@ function initUI() {
   });
 }
 
-function initEngine() {
-  return new Promise((resolve, reject) => {
-    try {
-      const engine = window.gameEngine;
-      if (!engine || typeof engine.init !== 'function') {
-        return reject(new Error('Engine module is not available'));
-      }
-      const result = engine.init();
-      if (result && typeof result.then === 'function') {
-        result.then(resolve).catch(reject);
-      } else {
-        resolve();
-      }
-    } catch (e) {
-      reject(e);
+import preloadGameAssets from './preloadGameAssets.js';
+
+async function initEngine() {
+  const engine = window.gameEngine;
+  if (!engine || typeof engine.init !== 'function') {
+    throw new Error('Engine module is not available');
+  }
+
+  const overlay = document.getElementById('loading-overlay');
+  const progress = document.getElementById('loading-progress');
+
+  function onProgress(ratio) {
+    if (progress) {
+      progress.textContent = Math.floor(ratio * 100) + '%';
     }
-  });
+  }
+
+  if (overlay) overlay.classList.remove('overlay--hidden');
+  await preloadGameAssets(onProgress);
+  if (overlay) overlay.classList.add('overlay--hidden');
+
+  const result = engine.init();
+  if (result && typeof result.then === 'function') {
+    await result;
+  }
 }
 
 export default async function bootstrapApp() {
