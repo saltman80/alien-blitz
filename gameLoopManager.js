@@ -9,20 +9,36 @@ let renderer;
 let player;
 let aliens;
 let score = 0;
+let lives = 3;
+let level = 1;
 let lastTime = 0;
 let running = false;
 let rafId = null;
+let canvasWidth = 0;
+let canvasHeight = 0;
 
 function initGame() {
   const canvas = document.getElementById('game-canvas');
   renderer = new CanvasRenderManager(canvas);
   const canvasRect = canvas.getBoundingClientRect();
-  player = new Player(canvasRect.width / 2, canvasRect.height - 40, { canvasWidth: canvasRect.width });
+  canvasWidth = canvasRect.width;
+  canvasHeight = canvasRect.height;
+  player = new Player(canvasWidth / 2, canvasHeight - 40, { canvasWidth });
   aliens = new AlienGridController(60, 60, 50, 50, { width: 40, height: 30 });
   aliens.addAliens(3, 8);
   score = 0;
-  if (window.gameUI && typeof window.gameUI.updateScore === 'function') {
-    window.gameUI.updateScore(score);
+  lives = 3;
+  level = 1;
+  if (window.gameUI) {
+    if (typeof window.gameUI.updateScore === 'function') {
+      window.gameUI.updateScore(score);
+    }
+    if (typeof window.gameUI.updateLives === 'function') {
+      window.gameUI.updateLives(lives);
+    }
+    if (typeof window.gameUI.updateLevel === 'function') {
+      window.gameUI.updateLevel(level);
+    }
   }
   initKeyStateTracker();
 }
@@ -52,6 +68,49 @@ function update(dt) {
   }
   // prune dead aliens
   aliens.aliens = aliens.getAliens().filter(a => a.alive);
+
+  // check for aliens reaching bottom or colliding with player
+  const playerBox = {
+    x: player.x - player.width / 2,
+    y: player.y - player.height / 2,
+    x2: player.x + player.width / 2,
+    y2: player.y + player.height / 2
+  };
+  for (const alien of aliens.getAliens()) {
+    const aBox = { x: alien.x, y: alien.y, x2: alien.x + alien.width, y2: alien.y + alien.height };
+    if (aBox.y2 >= canvasHeight || collides(aBox, playerBox)) {
+      handleLifeLost();
+      return;
+    }
+  }
+
+  // advance level if all aliens destroyed
+  if (aliens.isEmpty()) {
+    level += 1;
+    if (window.gameUI && typeof window.gameUI.updateLevel === 'function') {
+      window.gameUI.updateLevel(level);
+    }
+    aliens.addAliens(3, 8);
+  }
+}
+
+function handleLifeLost() {
+  lives = Math.max(0, lives - 1);
+  if (window.gameUI && typeof window.gameUI.updateLives === 'function') {
+    window.gameUI.updateLives(lives);
+  }
+  if (lives === 0) {
+    if (window.gameUI && typeof window.gameUI.showGameOver === 'function') {
+      window.gameUI.showGameOver(score);
+    }
+    stopGameLoop();
+  } else {
+    aliens.clear();
+    Bullets.clear();
+    aliens.addAliens(3, 8);
+    player.x = canvasWidth / 2;
+    player.y = canvasHeight - 40;
+  }
 }
 
 function render() {
