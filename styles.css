@@ -40,6 +40,15 @@ body {
   border-bottom: 2px solid var(--accent-green);
 }
 
+/* HUD overlay container */
+#ui-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  pointer-events: none;
+  color: white;
+}
+
 .hud {
   position: absolute;
   top: 0;
