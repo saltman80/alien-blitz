@@ -1,5 +1,6 @@
 import { Entity } from './entityBaseClass.js';
-import { Projectile } from './projectile.js';
+import bulletManager from './bulletLifecycleManager.js';
+import { isKeyDown } from './keyStateTracker.js';
 
 const FIRE_KEYS = ['Space', ' '];
 
@@ -8,28 +9,29 @@ function clamp(value, min, max) {
 }
 
 class Player extends Entity {
-  constructor(game, x, y, options = {}) {
-    super(game, x, y, options);
+  constructor(x, y, options = {}) {
+    super(x, y, options.width || 40, options.height || 20);
     this.speed = options.speed || 200;
     this.fireRate = options.fireRate || 0.5;
     this.cooldown = 0;
     this.projectileOptions = options.projectileOptions || {};
+    this.canvasWidth = options.canvasWidth || 800;
   }
 
   update(dt) {
-    if (this.input.isKeyDown('ArrowLeft')) {
+    if (isKeyDown('ArrowLeft')) {
       this.x -= this.speed * dt;
     }
-    if (this.input.isKeyDown('ArrowRight')) {
+    if (isKeyDown('ArrowRight')) {
       this.x += this.speed * dt;
     }
 
     const half = this.width / 2;
-    this.x = clamp(this.x, half, this.game.width - half);
+    this.x = clamp(this.x, half, this.canvasWidth - half);
 
     this.cooldown = Math.max(0, this.cooldown - dt);
 
-    const isFiring = FIRE_KEYS.some(key => this.input.isKeyDown(key));
+    const isFiring = FIRE_KEYS.some(key => isKeyDown(key));
     if (isFiring && this.cooldown <= 0) {
       this.fire();
       this.cooldown = this.fireRate;
@@ -37,12 +39,7 @@ class Player extends Entity {
   }
 
   fire() {
-    const proj = new Projectile(
-      this.x,
-      this.y - this.height / 2,
-      this.projectileOptions
-    );
-    this.game.addEntity(proj);
+    bulletManager.shoot(this.x, this.y - this.height / 2);
   }
 }
 

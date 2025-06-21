@@ -13,10 +13,10 @@ function validateBoundingBox(box, name) {
         }
     }
     if (box.x > box.x2) {
-        throw new RangeError(`${name}.x (${box.x}) must be ? ${name}.x2 (${box.x2})`);
+        throw new RangeError(`${name}.x (${box.x}) must be <= ${name}.x2 (${box.x2})`);
     }
     if (box.y > box.y2) {
-        throw new RangeError(`${name}.y (${box.y}) must be ? ${name}.y2 (${box.y2})`);
+        throw new RangeError(`${name}.y (${box.y}) must be <= ${name}.y2 (${box.y2})`);
     }
 }
 

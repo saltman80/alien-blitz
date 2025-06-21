@@ -88,4 +88,26 @@ class BulletLifecycleManager {
   }
 }
 
-export default new BulletLifecycleManager();
+const bulletManager = new BulletLifecycleManager();
+
+export function shoot(x, y) {
+  bulletManager.shoot(x, y);
+}
+
+export function update(dt) {
+  bulletManager.updateAll(dt);
+}
+
+export function draw(ctx) {
+  bulletManager.drawAll(ctx);
+}
+
+export function clear() {
+  bulletManager.clear();
+}
+
+export function getBullets() {
+  return bulletManager.getBullets();
+}
+
+export default bulletManager;
