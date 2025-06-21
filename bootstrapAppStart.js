@@ -42,7 +42,9 @@ async function initEngine() {
   }
 
   if (overlay) overlay.classList.remove('overlay--hidden');
-  await preloadGameAssets(onProgress);
+  const loadedAssets = await preloadGameAssets(onProgress);
+  // make them available to the rest of the game:
+  window.gameAssets = loadedAssets;
   if (overlay) overlay.classList.add('overlay--hidden');
 
   const result = engine.init();

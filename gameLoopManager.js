@@ -23,8 +23,27 @@ function initGame() {
   const canvasRect = canvas.getBoundingClientRect();
   canvasWidth = canvasRect.width;
   canvasHeight = canvasRect.height;
-  player = new Player(canvasWidth / 2, canvasHeight - 40, { canvasWidth });
-  aliens = new AlienGridController(60, 60, 50, 50, { width: 40, height: 30 });
+  player = new Player(
+    canvasWidth / 2,
+    canvasHeight - 40,
+    {
+      canvasWidth,
+      image: window.gameAssets && window.gameAssets.images.playerShip,
+      projectileOptions: { image: window.gameAssets && window.gameAssets.images.laser }
+    }
+  );
+
+  aliens = new AlienGridController(
+    60,
+    60,
+    50,
+    50,
+    {
+      width: 40,
+      height: 30,
+      image: window.gameAssets && window.gameAssets.images.alienBlue
+    }
+  );
   aliens.addAliens(3, 8);
   score = 0;
   lives = 3;

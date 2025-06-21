@@ -16,6 +16,7 @@ class Player extends Entity {
     this.cooldown = 0;
     this.projectileOptions = options.projectileOptions || {};
     this.canvasWidth = options.canvasWidth || 800;
+    this.image = options.image;
   }
 
   update(dt) {
@@ -39,19 +40,33 @@ class Player extends Entity {
   }
 
   draw(ctx) {
-    ctx.save();
-    ctx.fillStyle = 'white';
-    ctx.fillRect(
-      this.x - this.width / 2,
-      this.y - this.height / 2,
-      this.width,
-      this.height
-    );
-    ctx.restore();
+    if (this.image instanceof HTMLImageElement) {
+      ctx.drawImage(
+        this.image,
+        this.x - this.width / 2,
+        this.y - this.height / 2,
+        this.width,
+        this.height
+      );
+    } else {
+      ctx.save();
+      ctx.fillStyle = 'white';
+      ctx.fillRect(
+        this.x - this.width / 2,
+        this.y - this.height / 2,
+        this.width,
+        this.height
+      );
+      ctx.restore();
+    }
   }
 
   fire() {
-    bulletManager.shoot(this.x, this.y - this.height / 2);
+    bulletManager.shoot(
+      this.x,
+      this.y - this.height / 2,
+      this.projectileOptions
+    );
   }
 }
 
