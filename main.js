@@ -41,13 +41,14 @@ window.game = {
   }
 };
 
+const bootstrapPromise = bootstrapApp();
+
 gameOverlayManager.overlay.addEventListener('overlayAction', (e) => {
   const action = e.detail && e.detail.action;
   if (action === 'start') {
-    window.game.start();
+    bootstrapPromise.then(() => window.game.start());
   } else if (action === 'restart') {
-    window.game.restart();
+    bootstrapPromise.then(() => window.game.restart());
   }
 });
 
-bootstrapApp();

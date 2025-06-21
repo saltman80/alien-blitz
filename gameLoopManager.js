@@ -86,9 +86,9 @@ function update(dt) {
       if (!alien.alive || !bullet.alive) continue;
       const aBox = { x: alien.x, y: alien.y, x2: alien.x + alien.width, y2: alien.y + alien.height };
       const bBox = {
-        x: bullet.x - bullet.width / 2,
+        x: bullet.x,
         y: bullet.y,
-        x2: bullet.x + bullet.width / 2,
+        x2: bullet.x + bullet.width,
         y2: bullet.y + bullet.height
       };
       if (collides(aBox, bBox)) {

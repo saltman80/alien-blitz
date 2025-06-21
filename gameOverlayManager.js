@@ -33,6 +33,8 @@ class GameOverlayManager {
     // save focus
     this._prevFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
+    this.overlay.classList.toggle('overlay--grayscale', type === 'start' || type === 'gameOver');
+
     const templateFn = this.templates[type];
     const html = templateFn
       ? templateFn(data)
@@ -103,14 +105,14 @@ class GameOverlayManager {
     start: () => `
       <div class="overlay-content">
         <h1>Alien Blitz</h1>
-        <button data-action="start">Start Game</button>
+        <button class="overlay__button overlay__button--gray overlay__button--large" data-action="start">Start Game</button>
       </div>
     `,
     gameOver: data => `
       <div class="overlay-content">
         <h1>Game Over</h1>
         <p>Your Score: ${Number(data.score) || 0}</p>
-        <button data-action="restart">Play Again</button>
+        <button class="overlay__button overlay__button--gray overlay__button--large" data-action="restart">Play Again</button>
       </div>
     `,
     pause: () => `
