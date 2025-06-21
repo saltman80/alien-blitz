@@ -8,16 +8,14 @@ const assetManifest = {
     alienRed: 'assets/images/alienRed.png',
     explosion: 'assets/images/explosion.png'
   },
-  audio: {
-    shoot: 'assets/sounds/shoot.wav',
-    explosion: 'assets/sounds/explosion.wav',
-    bgm: 'assets/sounds/bgm.mp3'
-  }
+  // No audio assets yet; keep the object for future use
+  audio: {}
 };
 
 export default function preloadGameAssets(onProgress = () => {}, timeout = 10000) {
   const imagesToLoad = Object.entries(assetManifest.images);
-  const audioToLoad = Object.entries(assetManifest.audio);
+  // Temporarily skip loading audio until sound files are added
+  const audioToLoad = [];
   const totalAssets = imagesToLoad.length + audioToLoad.length;
   let loadedCount = 0;
   let aborted = false;
