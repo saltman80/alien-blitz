@@ -3,11 +3,6 @@ Alien Blitz
 
 ## Running the Demo
 
-1. Install [Node.js](https://nodejs.org/) if you don't already have it.
-2. Start the bundled static server:
-
-   ```bash
-   node server.js
-   ```
-
-3. Open your browser to [`http://localhost:8080`](http://localhost:8080) to see the game UI.
+1. Copy this directory to your Apache `htdocs` folder (for example `htdocs/AlienBlitz`).
+2. Ensure the `assets/` folder sits next to `index.html` inside that directory.
+3. Navigate to `http://localhost/AlienBlitz/` in your browser to play the game.
