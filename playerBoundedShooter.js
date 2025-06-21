@@ -10,12 +10,10 @@ function clamp(value, min, max) {
 
 class Player extends Entity {
   constructor(x, y, options = {}) {
-    // Slightly larger default ship size
-    super(x, y, options.width || 50, options.height || 30);
+    super(x, y, options.width || 60, options.height || 30);
     this.speed = options.speed || 200;
     this.fireRate = options.fireRate || 0.5;
     this.cooldown = 0;
-    this.projectileOptions = options.projectileOptions || {};
     this.canvasWidth = options.canvasWidth || 800;
     this.image = options.image;
   }
@@ -64,10 +62,9 @@ class Player extends Entity {
 
   fire() {
     bulletManager.shoot(this.x, this.y - this.height / 2, {
-      width: 6,
-      height: 20,
-      image: window.gameAssets && window.gameAssets.images.laser,
-      ...this.projectileOptions
+      width: 8,
+      height: 24,
+      image: window.gameAssets && window.gameAssets.images.laser
     });
   }
 }

@@ -30,11 +30,12 @@ function initGame() {
   canvasHeight = canvasRect.height;
   player = new Player(
     canvasWidth / 2,
-    canvasHeight - 40,
+    canvasHeight - 30,
     {
       canvasWidth,
-      image: window.gameAssets && window.gameAssets.images.playerShip,
-      projectileOptions: { image: window.gameAssets && window.gameAssets.images.laser }
+      width: 60,
+      height: 30,
+      image: window.gameAssets && window.gameAssets.images.playerShip
     }
   );
 
