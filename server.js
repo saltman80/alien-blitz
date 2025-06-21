@@ -16,8 +16,17 @@ const mimeTypes = {
 };
 
 const server = http.createServer((req, res) => {
-  const filePath = path.join(__dirname, req.url === '/' ? '/index.html' : req.url);
-  fs.readFile(filePath, (err, data) => {
+  // Normalize and resolve the requested path to prevent path traversal
+  const baseDir = path.resolve(__dirname);
+  const reqPath = decodeURIComponent(req.url.split('?')[0]);
+  let safePath = path.join(baseDir, reqPath === '/' ? 'index.html' : reqPath);
+  safePath = path.normalize(safePath);
+  if (!safePath.startsWith(baseDir)) {
+    res.writeHead(403);
+    return res.end('Forbidden');
+  }
+
+  fs.readFile(safePath, (err, data) => {
     if (err) {
       if (err.code === 'ENOENT') {
         res.writeHead(404);
@@ -26,7 +35,7 @@ const server = http.createServer((req, res) => {
       res.writeHead(500);
       return res.end('Server Error');
     }
-    const ext = path.extname(filePath).toLowerCase();
+    const ext = path.extname(safePath).toLowerCase();
     const type = mimeTypes[ext] || 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': type });
     res.end(data);
