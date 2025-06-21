@@ -43,7 +43,7 @@ function initEngine() {
   });
 }
 
-async function bootstrapApp() {
+export default async function bootstrapApp() {
   try {
     await initUI();
   } catch (uiError) {
@@ -59,5 +59,3 @@ async function bootstrapApp() {
     displayErrorToUser(engineError);
   }
 }
-
-window.addEventListener('DOMContentLoaded', bootstrapApp);
