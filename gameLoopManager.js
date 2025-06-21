@@ -4,6 +4,7 @@ import { Player } from './playerBoundedShooter.js';
 import AlienGridController from './alienGridController.js';
 import * as Bullets from './bulletLifecycleManager.js';
 import { collides } from './boundingBoxOverlapDetector.js';
+import Explosion from './explosion.js';
 
 let renderer;
 let player;
@@ -16,6 +17,7 @@ let running = false;
 let rafId = null;
 let canvasWidth = 0;
 let canvasHeight = 0;
+let explosions = [];
 
 function initGame() {
   const canvas = document.getElementById('game-canvas');
@@ -51,6 +53,7 @@ function initGame() {
   score = 0;
   lives = 3;
   level = 1;
+  explosions = [];
   if (window.gameUI) {
     if (typeof window.gameUI.updateScore === 'function') {
       window.gameUI.updateScore(score);
@@ -84,6 +87,12 @@ function update(dt) {
         y2: bullet.y + bullet.height
       };
       if (collides(aBox, bBox)) {
+        const ex = new Explosion(alien.x + alien.width / 2, alien.y + alien.height / 2, {
+          image: window.gameAssets && window.gameAssets.images.explosion,
+          width: alien.width,
+          height: alien.height
+        });
+        explosions.push(ex);
         alien.destroy();
         bullet.alive = false;
         score += 10;
@@ -93,6 +102,9 @@ function update(dt) {
       }
     }
   }
+
+  explosions.forEach(ex => ex.update(dt));
+  explosions = explosions.filter(ex => ex.alive);
 
   // check for aliens reaching bottom or colliding with player
   const playerBox = {
@@ -139,7 +151,12 @@ function handleLifeLost() {
 }
 
 function render() {
-  const entities = [...aliens.getAliens(), ...Bullets.getBullets(), player];
+  const entities = [
+    ...aliens.getAliens(),
+    ...explosions,
+    ...Bullets.getBullets(),
+    player
+  ];
   renderer.render({ entities, score });
 }
 
@@ -171,5 +188,6 @@ export function stopGameLoop() {
   }
   teardownKeyStateTracker();
   Bullets.clear();
+  explosions = [];
   renderer && renderer.destroy();
 }
