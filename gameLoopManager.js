@@ -6,6 +6,9 @@ import * as Bullets from './bulletLifecycleManager.js';
 import { collides } from './boundingBoxOverlapDetector.js';
 import Explosion from './explosion.js';
 
+const BASE_ALIEN_SPEED = 20;
+const SPEED_INCREMENT = 10;
+
 let renderer;
 let player;
 let aliens;
@@ -47,7 +50,8 @@ function initGame() {
     {
       width: 40,
       height: 30,
-      image: window.gameAssets && window.gameAssets.images.alienBlue
+      image: window.gameAssets && window.gameAssets.images.alienBlue,
+      speed: BASE_ALIEN_SPEED
     }
   );
   aliens.addAliens(3, 8);
@@ -125,6 +129,7 @@ function update(dt) {
   // advance level if all aliens destroyed
   if (aliens.isEmpty()) {
     level += 1;
+    aliens.speed = BASE_ALIEN_SPEED + SPEED_INCREMENT * (level - 1);
     if (window.gameUI && typeof window.gameUI.updateLevel === 'function') {
       window.gameUI.updateLevel(level);
     }
@@ -155,8 +160,8 @@ function render() {
   const entities = [
     ...aliens.getAliens(),
     ...explosions,
-    ...Bullets.getBullets(),
-    player
+    player,
+    ...Bullets.getBullets()
   ];
   renderer.render({ entities, score });
 }
