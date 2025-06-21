@@ -2,9 +2,9 @@ import { Entity } from './entityBaseClass.js';
 
 export class Projectile extends Entity {
   constructor(x, y, options = {}) {
-    super(x, y, options.width || 4, options.height || 10);
-    this.vy = options.speed || -300;
+    super(x, y, options.width || 8, options.height || 24);
     this.image = options.image;
+    this.vy = options.speed || -300;
     this.config = options;
   }
 

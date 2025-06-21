@@ -59,22 +59,23 @@ body {
   font-size: 14px;
 }
 
-.hud__score {
+
+#ui-overlay {
   position: absolute;
   top: 10px;
   left: 10px;
+  display: flex;
+  gap: 40px;
+  pointer-events: none;
+  font-family: var(--hud-font);
+  color: var(--hud-color);
+  text-shadow: var(--hud-shadow);
 }
 
-.hud__lives {
-  position: absolute;
-  top: 10px;
-  left: 140px;
-}
-
+.hud__score,
+.hud__lives,
 .hud__level {
-  position: absolute;
-  top: 10px;
-  left: 270px;
+  position: static;
 }
 
 .hud__lives-icon {
