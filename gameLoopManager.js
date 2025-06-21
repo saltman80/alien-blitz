@@ -66,8 +66,6 @@ function update(dt) {
       }
     }
   }
-  // prune dead aliens
-  aliens.aliens = aliens.getAliens().filter(a => a.alive);
 
   // check for aliens reaching bottom or colliding with player
   const playerBox = {
