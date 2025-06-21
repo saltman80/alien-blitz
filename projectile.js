@@ -2,10 +2,11 @@ import { Entity } from './entityBaseClass.js';
 
 export class Projectile extends Entity {
   constructor(x, y, options = {}) {
-    super(x, y, options.width || 8, options.height || 24);
+    const w = options.width || 12;
+    const h = options.height || 36;
+    super(x - w / 2, y, w, h);
     this.image = options.image;
     this.vy = options.speed || -300;
-    this.config = options;
   }
 
   update(dt) {
@@ -17,16 +18,10 @@ export class Projectile extends Entity {
 
   draw(ctx) {
     if (this.image) {
-      ctx.drawImage(
-        this.image,
-        this.x - this.width / 2,
-        this.y,
-        this.width,
-        this.height
-      );
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     } else {
-      ctx.fillStyle = this.config.color || 'white';
-      ctx.fillRect(this.x - this.width / 2, this.y, this.width, this.height);
+      ctx.fillStyle = 'white';
+      ctx.fillRect(this.x, this.y, this.width, this.height);
     }
   }
 }

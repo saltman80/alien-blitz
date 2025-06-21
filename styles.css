@@ -152,6 +152,21 @@ body {
   box-shadow: 0 0 8px var(--accent-purple);
 }
 
+.overlay--grayscale {
+  filter: grayscale(1);
+}
+
+.overlay__button--gray {
+  background-color: #555;
+  border-color: #888;
+  color: #f0f0f0;
+}
+
+.overlay__button--large {
+  font-size: 18px;
+  padding: 16px 32px;
+}
+
 .overlay__button:hover,
 .overlay__button:focus {
   background-color: var(--button-hover-bg);

@@ -64,7 +64,7 @@ class Player extends Entity {
     bulletManager.shoot(this.x, this.y - this.height / 2, {
       width: 12,
       height: 36,
-      image: window.gameAssets && window.gameAssets.images.laser
+      image: window.gameAssets.images.laser
     });
   }
 }
