@@ -4,6 +4,7 @@ export class Projectile extends Entity {
   constructor(x, y, options = {}) {
     super(x, y, options.width || 4, options.height || 10);
     this.vy = options.speed || -300;
+    this.image = options.image;
     this.config = options;
   }
 
@@ -15,7 +16,18 @@ export class Projectile extends Entity {
   }
 
   draw(ctx) {
-    ctx.fillStyle = this.config.color || 'white';
-    ctx.fillRect(this.x - this.width / 2, this.y, this.width, this.height);
+    if (this.image) {
+      ctx.drawImage(
+        this.image,
+        this.x - this.width / 2,
+        this.y,
+        this.width,
+        this.height
+      );
+    } else {
+      ctx.fillStyle = this.config.color || 'white';
+      ctx.fillRect(this.x - this.width / 2, this.y, this.width, this.height);
+    }
   }
 }
+

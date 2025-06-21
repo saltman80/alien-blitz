@@ -1,52 +1,4 @@
-/**
- * Simple Bullet class definition for use in BulletLifecycleManager.
- */
-class Bullet {
-  /**
-   * @param {number} x - Initial x-coordinate.
-   * @param {number} y - Initial y-coordinate.
-   * @param {object} [options]
-   */
-  constructor(x, y, options = {}) {
-    this.x = x;
-    this.y = y;
-    this.radius = 2;
-    this.speed = 300; // pixels per second
-    this.isAlive = true;
-    this.image = options.image;
-  }
-
-  /**
-   * Update bullet position.
-   * @param {number} dt - Delta time in seconds.
-   */
-  update(dt) {
-    this.y -= this.speed * dt;
-    if (this.y + this.radius < 0) {
-      this.isAlive = false;
-    }
-  }
-
-  /**
-   * Draw the bullet on the given context.
-   * @param {CanvasRenderingContext2D} ctx
-   */
-  draw(ctx) {
-    if (this.image instanceof HTMLImageElement) {
-      ctx.drawImage(
-        this.image,
-        this.x - this.image.width / 2,
-        this.y - this.image.height / 2,
-        this.image.width,
-        this.image.height
-      );
-    } else {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-}
+import { Projectile } from './projectile.js';
 
 /**
  * Manages the lifecycle of all bullets: creation, updating, drawing, and pruning.
@@ -54,7 +6,7 @@ class Bullet {
  */
 class BulletLifecycleManager {
   constructor() {
-    /** @type {Bullet[]} */
+    /** @type {Projectile[]} */
     this.bullets = [];
   }
 
@@ -64,7 +16,7 @@ class BulletLifecycleManager {
    * @param {number} y
    */
   shoot(x, y, options = {}) {
-    this.bullets.push(new Bullet(x, y, options));
+    this.bullets.push(new Projectile(x, y, options));
   }
 
   /**
@@ -73,7 +25,7 @@ class BulletLifecycleManager {
    */
   updateAll(dt) {
     this.bullets.forEach(bullet => bullet.update(dt));
-    this.bullets = this.bullets.filter(bullet => bullet.isAlive);
+    this.bullets = this.bullets.filter(bullet => bullet.alive);
   }
 
   /**
@@ -93,7 +45,7 @@ class BulletLifecycleManager {
 
   /**
    * Get the current list of active bullets.
-   * @returns {Bullet[]}
+   * @returns {Projectile[]}
    */
   getBullets() {
     return this.bullets;

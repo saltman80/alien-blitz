@@ -62,11 +62,12 @@ class Player extends Entity {
   }
 
   fire() {
-    bulletManager.shoot(
-      this.x,
-      this.y - this.height / 2,
-      this.projectileOptions
-    );
+    bulletManager.shoot(this.x, this.y - this.height / 2, {
+      width: 4,
+      height: 16,
+      image: window.gameAssets && window.gameAssets.images.laser,
+      ...this.projectileOptions
+    });
   }
 }
 
