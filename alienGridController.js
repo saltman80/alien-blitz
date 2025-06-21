@@ -8,6 +8,8 @@ export default class AlienGridController {
     this.vSpacing = vSpacing;
     this.alienConfig = alienConfig;
     this.aliens = [];
+    this.direction = 1;
+    this.speed = alienConfig.speed || 20;
   }
 
   addAliens(rows, cols) {
@@ -25,8 +27,25 @@ export default class AlienGridController {
    * Updates all aliens, removing any that are destroyed.
    * @param {number} dt Delta time since last update (in seconds).
    */
-  updateAll(dt) {
-    this.aliens.forEach(alien => alien.update(dt));
+  updateAll(dt, canvasWidth) {
+    const xs = this.aliens.map(a => a.x);
+    const rights = this.aliens.map(a => a.x + a.width);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...rights);
+
+    const step = this.direction * this.speed * dt;
+    if (minX + step < 0 || maxX + step > canvasWidth) {
+      this.direction *= -1;
+      this.aliens.forEach(alien => {
+        alien.y += this.vSpacing / 2;
+      });
+    }
+
+    this.aliens.forEach(alien => {
+      alien.x += this.direction * this.speed * dt;
+      alien.update(dt);
+    });
+
     this.aliens = this.aliens.filter(alien => alien.alive);
   }
 

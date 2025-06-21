@@ -65,19 +65,24 @@ function initGame() {
 function update(dt) {
   player.update(dt);
   Bullets.update(dt);
-  aliens.updateAll(dt);
+  aliens.updateAll(dt, canvasWidth);
 
   // collision detection between bullets and aliens
   const bullets = Bullets.getBullets();
   const alienList = aliens.getAliens();
   for (const alien of alienList) {
     for (const bullet of bullets) {
-      if (!alien.alive || !bullet.isAlive) continue;
+      if (!alien.alive || !bullet.alive) continue;
       const aBox = { x: alien.x, y: alien.y, x2: alien.x + alien.width, y2: alien.y + alien.height };
-      const bBox = { x: bullet.x - bullet.radius, y: bullet.y - bullet.radius, x2: bullet.x + bullet.radius, y2: bullet.y + bullet.radius };
+      const bBox = {
+        x: bullet.x - bullet.width / 2,
+        y: bullet.y,
+        x2: bullet.x + bullet.width / 2,
+        y2: bullet.y + bullet.height
+      };
       if (collides(aBox, bBox)) {
         alien.destroy();
-        bullet.isAlive = false;
+        bullet.alive = false;
         score += 10;
         if (window.gameUI && typeof window.gameUI.updateScore === 'function') {
           window.gameUI.updateScore(score);
