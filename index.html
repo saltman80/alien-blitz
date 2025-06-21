@@ -84,14 +84,16 @@
       });
 
       window.gameUI = {
+        init: (cb) => {
+          showStartScreen();
+          if (typeof cb === 'function') cb();
+        },
         showStartScreen,
         showGameOver,
         updateScore,
         updateLives,
         updateLevel
       };
-
-      showStartScreen();
     });
   </script>
   <script src="bootstrapAppStart.js"></script>
