@@ -13,11 +13,20 @@ export default class AlienGridController {
   }
 
   addAliens(rows, cols) {
+    const imgs = [
+      window.gameAssets && window.gameAssets.images.alienBlue,
+      window.gameAssets && window.gameAssets.images.alienGreen,
+      window.gameAssets && window.gameAssets.images.alienRed
+    ];
+
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         const x = this.startX + col * this.hSpacing;
         const y = this.startY + row * this.vSpacing;
-        const alien = new Alien(x, y, this.alienConfig);
+        const alien = new Alien(x, y, {
+          ...this.alienConfig,
+          image: imgs[row % imgs.length]
+        });
         this.aliens.push(alien);
       }
     }
